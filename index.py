@@ -5,17 +5,11 @@ import cgi, os
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 print("Content-type: text/html; charset=utf-8\r\n")
 
-# html 세탁
-import html_sanitizer
-sanitizer = html_sanitizer.Sanitizer()
-
 # 파일 링크 생성
 files = os.listdir('./pages')
 linkList = ''
 for file in files:
   linkList += f'<li><a href="index.py?id={file}">{file}</a></li>'
-
-
 
 form = cgi.FieldStorage()
 if 'id' in form:
@@ -32,6 +26,13 @@ else:
   contents = 'welcome'
   update = ''
   delete = ''
+
+
+import html_sanitizer
+sanitizer = html_sanitizer.Sanitizer()
+title = sanitizer.sanitize(title)
+contents = sanitizer.sanitize(contents)
+
 
 
 print(f'''<!doctype html>
